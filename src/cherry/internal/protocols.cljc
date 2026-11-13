@@ -377,7 +377,9 @@
 (core/defn- proto-assign-impls [env resolve type-sym type [p sigs]]
   #_(update-protocol-var p type env)
   (core/let [psym      (resolve p)
-             pprefix   (protocol-prefix psym)
+             ;; property names use the bare protocol name, like defprotocol,
+             ;; reify and satisfies?: p/P and my.ns/P must match P
+             pprefix   (protocol-prefix (symbol (name psym)))
              skip-flag (set (core/-> type-sym meta :skip-protocol-flag))]
     (if (= p 'Object)
       (add-obj-methods type type-sym sigs)

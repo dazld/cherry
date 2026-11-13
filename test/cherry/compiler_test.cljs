@@ -733,6 +733,17 @@ IReset (-reset! [this v]
                           (str first-name \" says hello to \" name)))
                       (greet (Person. \"Alice\") \"Bob\"))")))))
 
+(deftest qualified-protocol-impl-test
+  (testing "deftype with a namespace-qualified protocol"
+    (is (= "hi" (jsv! "(do (defprotocol Greeter (greet [this]))
+                            (deftype P [] user/Greeter (greet [_] \"hi\"))
+                            (greet (P.)))"))))
+  (testing "extend-type with a namespace-qualified protocol"
+    (is (= "hi" (jsv! "(do (defprotocol Greeter (greet [this]))
+                            (deftype P [])
+                            (extend-type P user/Greeter (greet [_] \"hi\"))
+                            (greet (P.)))")))))
+
 (deftest protocol-prn-test
   (is (= ["user/Person" "nth not supported on this type user/Person"]
          (jsv! "(deftype Person [first-name]
