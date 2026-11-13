@@ -5,6 +5,7 @@
             ["url" :refer [pathToFileURL]]
             [cherry.compiler.node :as cn :refer [sci]]
             [sci.core :as sci]
+            [sci.ctx-store :as store]
             [squint.internal.node.utils :as utils]
             [squint.internal.test :as internal-test]))
 
@@ -48,6 +49,10 @@
                               'js js/globalThis}
                     :features #{:cherry :cljs}
                     :unrestricted true}))
+
+;; Macros loaded here are invoked later by the compiler, outside eval-form,
+;; so bind the ctx store globally: resolve, macroexpand-1 etc. need it.
+(store/reset-ctx! ctx)
 
 (sci/alter-var-root sci/print-fn (constantly *print-fn*))
 (sci/alter-var-root sci/print-err-fn (constantly *print-err-fn*))

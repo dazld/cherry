@@ -137,7 +137,7 @@
     (let [out (:out (shell {:dir dir :out :string} "node" "cljs_test_smoke.mjs"))]
       (fs/delete out-file)
       (when (fs/exists? macros-out) (fs/delete macros-out))
-      (assert (str/includes? out "Ran 13 tests containing 26 assertions") out)
+      (assert (str/includes? out "Ran 14 tests containing 28 assertions") out)
       (assert (str/includes? out "1 failures, 0 errors") out)
       ;; :begin-test-ns must fire for each ns visited by run-tests
       (assert (str/includes? out "Testing ns.a") out)
